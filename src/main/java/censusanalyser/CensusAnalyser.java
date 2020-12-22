@@ -17,6 +17,7 @@ import java.util.stream.StreamSupport;
 public class CensusAnalyser {
     List<IndiaCensusCSV> censusCSVList = null;
     List<IPL2019BattingRecordCSV> IPLBattingRecordList = null;
+    List<IPL2019BowlingRecordCSV> IPLBowlingRecordList = null;
 
     private <E> Iterator<E> getCSVFileIterator(Reader reader, Class csvClass) throws CensusAnalyserException {
         try {
@@ -77,8 +78,8 @@ public class CensusAnalyser {
         try {
             Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
             ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
-            Iterator<IPL2019BowlingRecordCSV> censusCSVIterator = csvBuilder.getCSVFileIterator(reader, IPL2019BowlingRecordCSV.class);
-            return this.getCount(censusCSVIterator);
+            IPLBowlingRecordList = csvBuilder.getCSVFileList(reader, IPL2019BowlingRecordCSV.class);
+            return IPLBowlingRecordList.size();
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
@@ -132,6 +133,20 @@ public class CensusAnalyser {
         }
     }
 
+    private void sortBowling(Comparator<IPL2019BowlingRecordCSV> censusComparator) {
+        for (int i = 0; i < IPLBowlingRecordList.size() - 1; i++) {
+            for (int j = 0; j < IPLBowlingRecordList.size() - i - 1; j++) {
+                IPL2019BowlingRecordCSV avg1 = IPLBowlingRecordList.get(j);
+                IPL2019BowlingRecordCSV avg2 = IPLBowlingRecordList.get(j + 1);
+                if (censusComparator.compare(avg1, avg2) > 0) {
+                    IPLBowlingRecordList.set(j, avg2);
+                    IPLBowlingRecordList.set(j + 1, avg1);
+                }
+            }
+        }
+    }
+
+
 
     public String getBattingAverageWiseSortedData() throws CensusAnalyserException {
         if (IPLBattingRecordList == null || IPLBattingRecordList.size() == 0) {
@@ -170,6 +185,16 @@ public class CensusAnalyser {
         Comparator<IPL2019BattingRecordCSV> battingRecordCSVComparator = Comparator.comparing(battingRecordCSV -> battingRecordCSV.fours);
         this.sortBatting(battingRecordCSVComparator);
         String sortedStateCensusJson = new Gson().toJson(IPLBattingRecordList);
+        return sortedStateCensusJson;
+    }
+
+    public String getBowlingAverageWiseSortedData() throws CensusAnalyserException {
+        if (IPLBowlingRecordList == null || IPLBowlingRecordList.size() == 0) {
+            throw new CensusAnalyserException("No Bowling Data", CensusAnalyserException.ExceptionType.NO_BATTING_DATA);
+        }
+        Comparator<IPL2019BowlingRecordCSV> bowlingRecordCSVComparator = Comparator.comparing(bowlingRecordCSV -> bowlingRecordCSV.average);
+        this.sortBowling(bowlingRecordCSVComparator);
+        String sortedStateCensusJson = new Gson().toJson(IPLBowlingRecordList);
         return sortedStateCensusJson;
     }
 }
