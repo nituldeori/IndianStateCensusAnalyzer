@@ -7,7 +7,8 @@ public class CensusAnalyserException extends Exception {
         CENSUS_FILE_PROBLEM,
         UNABLE_TO_PARSE,
         HEADER_MISSING_EXCEPTION,
-        NO_CENSUS_DATA
+        NO_CENSUS_DATA,
+        NO_BATTING_DATA
 
 
     };

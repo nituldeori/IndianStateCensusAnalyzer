@@ -10,6 +10,8 @@ public class CensusAnalyserTest {
     private static final String INDIA_CENSUS_CSV_FILE_PATH = "./src/test/resources/IndiaStateCensusData.csv";
     private static final String WRONG_CSV_FILE_PATH = "./src/main/resources/IndiaStateCensusData.csv";
     private static final String INDIA_STATECODE_CSV_FILE_PATH = "./src/test/resources/IndiaStateCode.csv";
+    private static final String IPL2019_MOSTRUNS_FILE_PATH = "./src/test/resources/IPL2019FactsheetMostRuns.csv";
+    private static final String IPL2019_MOSTWICKETS_FILE_PATH = "./src/test/resources/IPL2019FactsheetMostWkts.csv";
 
     @Test
     public void givenIndianCensusCSVFileReturnsCorrectRecords() {
@@ -86,6 +88,39 @@ public class CensusAnalyserTest {
             String sortedCensusData = censusAnalyser.getStateWiseSortedCensusData();
             IndiaCensusCSV[] censusCSV = new Gson().fromJson(sortedCensusData,IndiaCensusCSV[].class);
             Assert.assertEquals("Andhra Pradesh", censusCSV[0].state);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void givenIPL2019BattingDataCSVFileReturnsCorrectRecords(){
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            int numOfRecords = censusAnalyser.loadIPL2019BattingData(IPL2019_MOSTRUNS_FILE_PATH);
+            Assert.assertEquals(100,numOfRecords);
+        } catch (CensusAnalyserException e) { }
+    }
+
+    @Test
+    public void givenIPL2019BowlingDataCSVFileReturnsCorrectRecords(){
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            int numOfRecords = censusAnalyser.loadIPL2019BowlingData(IPL2019_MOSTWICKETS_FILE_PATH);
+            Assert.assertEquals(99,numOfRecords);
+        } catch (CensusAnalyserException e) { }
+
+    }
+
+    @Test
+    public void givenIPL2019BattingRecors_WhenSortedOnBattingAverage_ShouldReturnSortedResult(){
+        CensusAnalyser censusAnalyser = new CensusAnalyser();
+        try {
+            censusAnalyser.loadIPL2019BattingData(IPL2019_MOSTRUNS_FILE_PATH);
+            String sortedBattingAverageData = censusAnalyser.getBattingAverageWiseSortedData();
+            IPL2019BattingRecordCSV[] battingRecordCSV = new Gson().fromJson(sortedBattingAverageData,IPL2019BattingRecordCSV[].class);
+            Assert.assertEquals("MS Dhoni", battingRecordCSV[0].player);
         } catch (CensusAnalyserException e) {
             e.printStackTrace();
         }
