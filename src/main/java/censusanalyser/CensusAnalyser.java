@@ -152,6 +152,26 @@ public class CensusAnalyser {
         String sortedStateCensusJson = new Gson().toJson(IPLBattingRecordList);
         return sortedStateCensusJson;
     }
+
+    public String getSixesWiseSortedData() throws CensusAnalyserException {
+        if (IPLBattingRecordList == null || IPLBattingRecordList.size() == 0) {
+            throw new CensusAnalyserException("No Batting Data", CensusAnalyserException.ExceptionType.NO_BATTING_DATA);
+        }
+        Comparator<IPL2019BattingRecordCSV> battingRecordCSVComparator = Comparator.comparing(battingRecordCSV -> battingRecordCSV.sixes);
+        this.sortBatting(battingRecordCSVComparator);
+        String sortedStateCensusJson = new Gson().toJson(IPLBattingRecordList);
+        return sortedStateCensusJson;
+    }
+
+    public String getFoursWiseSortedData() throws CensusAnalyserException {
+        if (IPLBattingRecordList == null || IPLBattingRecordList.size() == 0) {
+            throw new CensusAnalyserException("No Batting Data", CensusAnalyserException.ExceptionType.NO_BATTING_DATA);
+        }
+        Comparator<IPL2019BattingRecordCSV> battingRecordCSVComparator = Comparator.comparing(battingRecordCSV -> battingRecordCSV.fours);
+        this.sortBatting(battingRecordCSVComparator);
+        String sortedStateCensusJson = new Gson().toJson(IPLBattingRecordList);
+        return sortedStateCensusJson;
+    }
 }
 
 
