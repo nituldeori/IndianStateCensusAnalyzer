@@ -119,7 +119,7 @@ public class CensusAnalyser {
         }
     }
 
-    private void sortBattingAvg(Comparator<IPL2019BattingRecordCSV> censusComparator) {
+    private void sortBatting(Comparator<IPL2019BattingRecordCSV> censusComparator) {
         for (int i = 0; i < IPLBattingRecordList.size() - 1; i++) {
             for (int j = 0; j < IPLBattingRecordList.size() - i - 1; j++) {
                 IPL2019BattingRecordCSV avg1 = IPLBattingRecordList.get(j);
@@ -138,7 +138,17 @@ public class CensusAnalyser {
             throw new CensusAnalyserException("No Batting Data", CensusAnalyserException.ExceptionType.NO_BATTING_DATA);
         }
         Comparator<IPL2019BattingRecordCSV> battingRecordCSVComparator = Comparator.comparing(battingRecordCSV -> battingRecordCSV.average);
-        this.sortBattingAvg(battingRecordCSVComparator);
+        this.sortBatting(battingRecordCSVComparator);
+        String sortedStateCensusJson = new Gson().toJson(IPLBattingRecordList);
+        return sortedStateCensusJson;
+    }
+
+    public String getBattingStrikeRateWiseSortedData() throws CensusAnalyserException {
+        if (IPLBattingRecordList == null || IPLBattingRecordList.size() == 0) {
+            throw new CensusAnalyserException("No Batting Data", CensusAnalyserException.ExceptionType.NO_BATTING_DATA);
+        }
+        Comparator<IPL2019BattingRecordCSV> battingRecordCSVComparator = Comparator.comparing(battingRecordCSV -> battingRecordCSV.strikeRate);
+        this.sortBatting(battingRecordCSVComparator);
         String sortedStateCensusJson = new Gson().toJson(IPLBattingRecordList);
         return sortedStateCensusJson;
     }
