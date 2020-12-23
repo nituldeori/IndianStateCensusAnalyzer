@@ -211,6 +211,28 @@ public class CensusAnalyserTest {
 
     }
 
+    @Test
+    public void givenIPL2019BattingRecords_WhenSortedOnBattingStrikeRatesWith6sAnd4s_ShouldReturnSortedResult(){
+        CensusAnalyser censusAnalyser = new CensusAnalyser();
+        try {
+            censusAnalyser.loadIPL2019BattingData(IPL2019_MOSTRUNS_FILE_PATH);
+            String sortedBattingStrikeRateData = censusAnalyser.getBattingStrikeRateWiseSortedData();
+            IPL2019BattingRecordCSV[] battingRecordCSV = new Gson().fromJson(sortedBattingStrikeRateData,IPL2019BattingRecordCSV[].class);
+            ArrayList<IPL2019BattingRecordCSV> battingRecordFiltered = new ArrayList<>();
+            for(IPL2019BattingRecordCSV r: battingRecordCSV){
+                if(r.sixes>0 && r.fours>0){
+                    battingRecordFiltered.add(r);
+                }
+            }
+            Assert.assertEquals("Ishant Sharma", battingRecordFiltered.get(0).player);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
 
 
 
