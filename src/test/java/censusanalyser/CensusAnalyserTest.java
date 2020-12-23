@@ -5,6 +5,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.ArrayList;
+
 public class CensusAnalyserTest {
 
     private static final String INDIA_CENSUS_CSV_FILE_PATH = "./src/test/resources/IndiaStateCensusData.csv";
@@ -210,6 +212,27 @@ public class CensusAnalyserTest {
         }
 
     }
+
+    @Test
+    public void givenIPL2019BattingRecords_WhenSortedOnAverageWithNoFiftyNoHundred_ShouldReturnSortedResult(){
+        CensusAnalyser censusAnalyser = new CensusAnalyser();
+        try {
+            censusAnalyser.loadIPL2019BattingData(IPL2019_MOSTRUNS_FILE_PATH);
+            String sortedBattingAverageData = censusAnalyser.getBattingAverageWiseSortedData();
+            IPL2019BattingRecordCSV[] battingRecordCSV = new Gson().fromJson(sortedBattingAverageData,IPL2019BattingRecordCSV[].class);
+            ArrayList<IPL2019BattingRecordCSV> battingRecordFiltered = new ArrayList<>();
+            for(IPL2019BattingRecordCSV r: battingRecordCSV){
+                if(r.fifties==0 && r.hundreds==0 && r!=null){
+                    battingRecordFiltered.add(r);
+                }
+            }
+            Assert.assertEquals("Marcus Stoinis", battingRecordFiltered.get(0).player);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 
 
