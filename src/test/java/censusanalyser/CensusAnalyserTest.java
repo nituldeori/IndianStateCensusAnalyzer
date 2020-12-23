@@ -257,7 +257,7 @@ public class CensusAnalyserTest {
     }
 
     @Test
-    public void givenIPL2019BowlingRecords_WhenSortedOnWicketsAndBestBowlingAverage_ShouldReturnSortedResult(){
+    public void givenIPL2019BowlingRecords_WhenSortedOnWicketsWithBestBowlingAverage_ShouldReturnSortedResult(){
         CensusAnalyser censusAnalyser = new CensusAnalyser();
         try {
             censusAnalyser.loadIPL2019BowlingData(IPL2019_MOSTWICKETS_FILE_PATH);
@@ -275,6 +275,27 @@ public class CensusAnalyserTest {
         }
 
     }
+
+    @Test
+    public void givenIPL2019BowlingRecords_WhenSortedOnBowlingAverageWithBestBowlingStrikeRates_ShouldReturnSortedResult(){
+        CensusAnalyser censusAnalyser = new CensusAnalyser();
+        try {
+            censusAnalyser.loadIPL2019BowlingData(IPL2019_MOSTWICKETS_FILE_PATH);
+            String sortedBowlingAverageData = censusAnalyser.getBowlingAverageWiseSortedData();
+            IPL2019BowlingRecordCSV[] bowlingRecordCSV = new Gson().fromJson(sortedBowlingAverageData,IPL2019BowlingRecordCSV[].class);
+            ArrayList<IPL2019BowlingRecordCSV> bowlingRecordFiltered = new ArrayList<>();
+            for(IPL2019BowlingRecordCSV r:bowlingRecordCSV){
+                if(r.strikeRate<24.0 && r.average!=0 && r.strikeRate!=0){
+                    bowlingRecordFiltered.add(r);
+                }
+            }
+            Assert.assertEquals("Anukul Roy", bowlingRecordFiltered.get(0).player);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 
 
