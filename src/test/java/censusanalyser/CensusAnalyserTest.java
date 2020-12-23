@@ -231,6 +231,26 @@ public class CensusAnalyserTest {
 
     }
 
+    @Test
+    public void givenIPL2019BattingRecords_WhenSortedOnBattingAverageWithBestBattingStrikeRates_ShouldReturnSortedResult(){
+        CensusAnalyser censusAnalyser = new CensusAnalyser();
+        try {
+            censusAnalyser.loadIPL2019BattingData(IPL2019_MOSTRUNS_FILE_PATH);
+            String sortedBattingAverageData = censusAnalyser.getBattingAverageWiseSortedData();
+            IPL2019BattingRecordCSV[] battingRecordCSV = new Gson().fromJson(sortedBattingAverageData,IPL2019BattingRecordCSV[].class);
+            ArrayList<IPL2019BattingRecordCSV> battingRecordFiltered = new ArrayList<>();
+            for(IPL2019BattingRecordCSV r: battingRecordCSV){
+                if(r.strikeRate>130){
+                    battingRecordFiltered.add(r);
+                }
+            }
+            Assert.assertEquals("MS Dhoni", battingRecordFiltered.get(0).player);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 
 
