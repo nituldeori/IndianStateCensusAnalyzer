@@ -146,6 +146,19 @@ public class CensusAnalyser {
         }
     }
 
+    private void sortBowling2(Comparator<IPL2019BowlingRecordCSV> censusComparator) {
+        for (int i = 0; i < IPLBowlingRecordList.size() - 1; i++) {
+            for (int j = 0; j < IPLBowlingRecordList.size() - i - 1; j++) {
+                IPL2019BowlingRecordCSV avg1 = IPLBowlingRecordList.get(j);
+                IPL2019BowlingRecordCSV avg2 = IPLBowlingRecordList.get(j + 1);
+                if (censusComparator.compare(avg1, avg2) < 0) {
+                    IPLBowlingRecordList.set(j, avg2);
+                    IPLBowlingRecordList.set(j + 1, avg1);
+                }
+            }
+        }
+    }
+
 
 
     public String getBattingAverageWiseSortedData() throws CensusAnalyserException {
@@ -231,6 +244,15 @@ public class CensusAnalyser {
     }
 
 
+    public String getWicketsSortedData() throws CensusAnalyserException {
+        if (IPLBowlingRecordList == null || IPLBowlingRecordList.size() == 0) {
+            throw new CensusAnalyserException("No Bowling Data", CensusAnalyserException.ExceptionType.NO_BATTING_DATA);
+        }
+        Comparator<IPL2019BowlingRecordCSV> bowlingRecordCSVComparator = Comparator.comparing(bowlingRecordCSV -> bowlingRecordCSV.wickets);
+        this.sortBowling2(bowlingRecordCSVComparator);
+        String sortedStateCensusJson = new Gson().toJson(IPLBowlingRecordList);
+        return sortedStateCensusJson;
+    }
 }
 
 

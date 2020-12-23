@@ -172,48 +172,6 @@ public class CensusAnalyserTest {
     }
 
     @Test
-    public void givenIPL2019BowlingRecords_WhenSortedOnBowlingAverage_ShouldReturnSortedResult(){
-        CensusAnalyser censusAnalyser = new CensusAnalyser();
-        try {
-            censusAnalyser.loadIPL2019BowlingData(IPL2019_MOSTWICKETS_FILE_PATH);
-            String sortedBowlingAverageData = censusAnalyser.getBowlingAverageWiseSortedData();
-            IPL2019BowlingRecordCSV[] bowlingRecordCSV = new Gson().fromJson(sortedBowlingAverageData,IPL2019BowlingRecordCSV[].class);
-            Assert.assertEquals("Shivam Dube", bowlingRecordCSV[0].player);
-        } catch (CensusAnalyserException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Test
-    public void givenIPL2019BowlingRecords_WhenSortedOnStrikeRate_ShouldReturnSortedResult(){
-        CensusAnalyser censusAnalyser = new CensusAnalyser();
-        try {
-            censusAnalyser.loadIPL2019BowlingData(IPL2019_MOSTWICKETS_FILE_PATH);
-            String sortedStrikeRateData = censusAnalyser.getStrikeRateWiseSortedData();
-            IPL2019BowlingRecordCSV[] bowlingRecordCSV = new Gson().fromJson(sortedStrikeRateData,IPL2019BowlingRecordCSV[].class);
-            Assert.assertEquals("Shivam Dube", bowlingRecordCSV[0].player);
-        } catch (CensusAnalyserException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Test
-    public void givenIPL2019BowlingRecords_WhenSortedOnEconomy_ShouldReturnSortedResult(){
-        CensusAnalyser censusAnalyser = new CensusAnalyser();
-        try {
-            censusAnalyser.loadIPL2019BowlingData(IPL2019_MOSTWICKETS_FILE_PATH);
-            String sortedEconomyData = censusAnalyser.getEconomySortedData();
-            IPL2019BowlingRecordCSV[] bowlingRecordCSV = new Gson().fromJson(sortedEconomyData,IPL2019BowlingRecordCSV[].class);
-            Assert.assertEquals("Shivam Dube", bowlingRecordCSV[0].player);
-        } catch (CensusAnalyserException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Test
     public void givenIPL2019BattingRecords_WhenSortedOnAverageWithNoFiftyNoHundred_ShouldReturnSortedResult(){
         CensusAnalyser censusAnalyser = new CensusAnalyser();
         try {
@@ -256,9 +214,80 @@ public class CensusAnalyserTest {
 
 
 
+    @Test
+    public void givenIPL2019BowlingRecords_WhenSortedOnBowlingAverage_ShouldReturnSortedResult(){
+        CensusAnalyser censusAnalyser = new CensusAnalyser();
+        try {
+            censusAnalyser.loadIPL2019BowlingData(IPL2019_MOSTWICKETS_FILE_PATH);
+            String sortedBowlingAverageData = censusAnalyser.getBowlingAverageWiseSortedData();
+            IPL2019BowlingRecordCSV[] bowlingRecordCSV = new Gson().fromJson(sortedBowlingAverageData,IPL2019BowlingRecordCSV[].class);
+            Assert.assertEquals("Shivam Dube", bowlingRecordCSV[0].player);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void givenIPL2019BowlingRecords_WhenSortedOnStrikeRate_ShouldReturnSortedResult(){
+        CensusAnalyser censusAnalyser = new CensusAnalyser();
+        try {
+            censusAnalyser.loadIPL2019BowlingData(IPL2019_MOSTWICKETS_FILE_PATH);
+            String sortedStrikeRateData = censusAnalyser.getStrikeRateWiseSortedData();
+            IPL2019BowlingRecordCSV[] bowlingRecordCSV = new Gson().fromJson(sortedStrikeRateData,IPL2019BowlingRecordCSV[].class);
+            Assert.assertEquals("Shivam Dube", bowlingRecordCSV[0].player);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void givenIPL2019BowlingRecords_WhenSortedOnEconomy_ShouldReturnSortedResult(){
+        CensusAnalyser censusAnalyser = new CensusAnalyser();
+        try {
+            censusAnalyser.loadIPL2019BowlingData(IPL2019_MOSTWICKETS_FILE_PATH);
+            String sortedEconomyData = censusAnalyser.getEconomySortedData();
+            IPL2019BowlingRecordCSV[] bowlingRecordCSV = new Gson().fromJson(sortedEconomyData,IPL2019BowlingRecordCSV[].class);
+            Assert.assertEquals("Shivam Dube", bowlingRecordCSV[0].player);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void givenIPL2019BowlingRecords_WhenSortedOnWicketsAndBestBowlingAverage_ShouldReturnSortedResult(){
+        CensusAnalyser censusAnalyser = new CensusAnalyser();
+        try {
+            censusAnalyser.loadIPL2019BowlingData(IPL2019_MOSTWICKETS_FILE_PATH);
+            String sortedWicketsData = censusAnalyser.getWicketsSortedData();
+            IPL2019BowlingRecordCSV[] bowlingRecordCSV = new Gson().fromJson(sortedWicketsData,IPL2019BowlingRecordCSV[].class);
+            ArrayList<IPL2019BowlingRecordCSV> bowlingRecordFiltered = new ArrayList<>();
+            for(IPL2019BowlingRecordCSV r:bowlingRecordCSV){
+                if(r.average<25.0){
+                    bowlingRecordFiltered.add(r);
+                }
+            }
+            Assert.assertEquals("Imran Tahir", bowlingRecordFiltered.get(0).player);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 
 
 
 
 }
+
+
+
+
+
+
+
+
+
+
