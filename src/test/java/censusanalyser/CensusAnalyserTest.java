@@ -296,6 +296,26 @@ public class CensusAnalyserTest {
 
     }
 
+    @Test
+    public void givenIPL2019BowlingRecords_WhenSortedOnBowlingStrikeRateWith5wAnd4w_ShouldReturnSortedResult(){
+        CensusAnalyser censusAnalyser = new CensusAnalyser();
+        try {
+            censusAnalyser.loadIPL2019BowlingData(IPL2019_MOSTWICKETS_FILE_PATH);
+            String sortedStrikeRateData = censusAnalyser.getStrikeRateWiseSortedData();
+            IPL2019BowlingRecordCSV[] bowlingRecordCSV = new Gson().fromJson(sortedStrikeRateData,IPL2019BowlingRecordCSV[].class);
+            ArrayList<IPL2019BowlingRecordCSV> bowlingRecordFiltered = new ArrayList<>();
+            for(IPL2019BowlingRecordCSV r:bowlingRecordCSV){
+                if(r.fiveWickets!=0 || r.fourWickets!=0){
+                    bowlingRecordFiltered.add(r);
+                }
+            }
+            Assert.assertEquals("Alzarri Joseph", bowlingRecordFiltered.get(0).player);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 
 
