@@ -207,6 +207,16 @@ public class CensusAnalyser {
         String sortedStateCensusJson = new Gson().toJson(IPLBowlingRecordList);
         return sortedStateCensusJson;
     }
+
+    public String getEconomySortedData() throws CensusAnalyserException{
+        if (IPLBowlingRecordList == null || IPLBowlingRecordList.size() == 0) {
+            throw new CensusAnalyserException("No Bowling Data", CensusAnalyserException.ExceptionType.NO_BATTING_DATA);
+        }
+        Comparator<IPL2019BowlingRecordCSV> bowlingRecordCSVComparator = Comparator.comparing(bowlingRecordCSV -> bowlingRecordCSV.economy);
+        this.sortBowling(bowlingRecordCSVComparator);
+        String sortedStateCensusJson = new Gson().toJson(IPLBowlingRecordList);
+        return sortedStateCensusJson;
+    }
 }
 
 

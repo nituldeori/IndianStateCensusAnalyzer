@@ -197,6 +197,20 @@ public class CensusAnalyserTest {
 
     }
 
+    @Test
+    public void givenIPL2019BowlingRecords_WhenSortedOnEconomy_ShouldReturnSortedResult(){
+        CensusAnalyser censusAnalyser = new CensusAnalyser();
+        try {
+            censusAnalyser.loadIPL2019BowlingData(IPL2019_MOSTWICKETS_FILE_PATH);
+            String sortedEconomyData = censusAnalyser.getEconomySortedData();
+            IPL2019BowlingRecordCSV[] bowlingRecordCSV = new Gson().fromJson(sortedEconomyData,IPL2019BowlingRecordCSV[].class);
+            Assert.assertEquals("Shivam Dube", bowlingRecordCSV[0].player);
+        } catch (CensusAnalyserException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 
 
